@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bang Sai Flood Center</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Thai",sans-serif;background:#f3f6f9;color:#17212b}
+header{background:#0b3954;color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:22px} header small{opacity:.8}
+.container{max-width:1400px;margin:auto;padding:20px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.card{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 10px #00000010}
+.label{color:#65727e;font-size:14px}.value{font-size:30px;font-weight:700;margin-top:8px}.unit{font-size:14px;color:#65727e}
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:15px;margin-top:15px}
+h2{font-size:18px;margin:0 0 15px}.map{height:430px;border-radius:12px;position:relative;overflow:hidden;background:
+linear-gradient(135deg,#dcebd7 25%,#eef2df 25% 48%,#d8ead7 48% 70%,#e8efd9 70%);
+}
+.river{position:absolute;width:130%;height:95px;background:#8ecae6;transform:rotate(-16deg);top:150px;left:-12%;border-radius:50%;opacity:.9}
+.maptitle{position:absolute;top:15px;left:15px;background:#fff;padding:8px 12px;border-radius:8px;font-weight:bold;z-index:2}
+.pin{position:absolute;width:18px;height:18px;border-radius:50%;border:3px solid white;box-shadow:0 2px 5px #0005;z-index:3}
+.red{background:#e63946}.orange{background:#f4a261}.green{background:#2a9d8f}.blue{background:#277da1}
+.legend{position:absolute;bottom:12px;left:12px;background:#fff;padding:10px;border-radius:8px;font-size:13px;z-index:4}
+.legend span{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 5px 0 10px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px;border-bottom:1px solid #edf0f2;font-size:14px}th{color:#667;font-weight:600}
+.badge{padding:5px 9px;border-radius:20px;font-size:12px}.b-red{background:#ffe3e5;color:#b4232e}.b-orange{background:#fff0d9;color:#9a5a00}.b-green{background:#dcf5eb;color:#13795b}
+button{border:0;border-radius:8px;padding:10px 14px;background:#0b3954;color:white;cursor:pointer}button:hover{opacity:.9}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form input,.form select,.form textarea{width:100%;padding:10px;border:1px solid #d7dde3;border-radius:8px}.full{grid-column:1/-1}
+.footer{margin-top:18px;color:#697580;font-size:12px;text-align:center}
+@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.map{height:340px}}
+@media(max-width:600px){.cards{grid-template-columns:1fr}.form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<div><h1>🌊 BANG SAI FLOOD CENTER</h1><small>ศูนย์ติดตามสถานการณ์น้ำและการช่วยเหลือ อ.บางไทร จ.พระนครศรีอยุธยา</small></div>
+<div id="clock"></div>
+</header>
+
+<div class="container">
+<section class="cards">
+<div class="card"><div class="label">ระดับน้ำล่าสุด</div><div class="value">3.82 <span class="unit">ม.</span></div><div class="unit">ข้อมูลตัวอย่าง</div></div>
+<div class="card"><div class="label">ปริมาณฝน 24 ชม.</div><div class="value">42.5 <span class="unit">มม.</span></div><div class="unit">ข้อมูลตัวอย่าง</div></div>
+<div class="card"><div class="label">จุดเฝ้าระวัง</div><div class="value">7 <span class="unit">จุด</span></div><div class="unit">อัปเดตล่าสุด</div></div>
+<div class="card"><div class="label">รายการช่วยเหลือวันนี้</div><div class="value" id="helpCount">12</div><div class="unit">รายการ</div></div>
+</section>
+
+<section class="grid">
+<div class="card">
+<h2>🗺️ แผนที่สถานการณ์</h2>
+<div class="map">
+<div class="maptitle">อำเภอบางไทร</div><div class="river"></div>
+<div class="pin red" style="left:28%;top:35%"></div>
+<div class="pin orange" style="left:51%;top:58%"></div>
+<div class="pin green" style="left:68%;top:31%"></div>
+<div class="pin blue" style="left:42%;top:23%"></div>
+<div class="pin red" style="left:77%;top:69%"></div>
+<div class="legend"><span class="red"></span>วิกฤต <span class="orange"></span>เฝ้าระวัง <span class="green"></span>ช่วยเหลือแล้ว <span class="blue"></span>จุดวัดน้ำ</div>
+</div>
+</div>
+
+<div class="card">
+<h2>📈 ระดับน้ำย้อนหลัง</h2>
+<svg viewBox="0 0 500 250" width="100%" height="250" preserveAspectRatio="none">
+<line x1="45" y1="20" x2="45" y2="220" stroke="#ccd5dc"/><line x1="45" y1="220" x2="480" y2="220" stroke="#ccd5dc"/>
+<polyline points="45,190 100,175 155,180 210,145 265,155 320,115 375,125 430,80 480,92" fill="none" stroke="#277da1" stroke-width="4"/>
+</svg>
+<div style="display:flex;justify-content:space-between;color:#788590;font-size:12px"><span>24 ชม.ที่ผ่านมา</span><span>ล่าสุด</span></div>
+</div>
+</section>
+
+<section class="grid">
+<div class="card">
+<h2>🆘 รายการสถานการณ์/การช่วยเหลือ</h2>
+<table id="helpTable"><thead><tr><th>เวลา</th><th>พื้นที่</th><th>ความต้องการ</th><th>สถานะ</th></tr></thead>
+<tbody>
+<tr><td>08:45</td><td>ต.บ้านม้า</td><td>น้ำดื่ม 50 ชุด</td><td><span class="badge b-red">เร่งด่วน</span></td></tr>
+<tr><td>08:10</td><td>ต.บางพลับ</td><td>เรือ 1 ลำ</td><td><span class="badge b-orange">กำลังดำเนินการ</span></td></tr>
+<tr><td>07:35</td><td>ต.ช้างใหญ่</td><td>อาหาร 30 ชุด</td><td><span class="badge b-green">ดำเนินการแล้ว</span></td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>➕ บันทึกการช่วยเหลือ</h2>
+<form id="helpForm" class="form">
+<div><label>พื้นที่</label><input id="area" required placeholder="เช่น ต.บ้านม้า"></div>
+<div><label>ความต้องการ</label><input id="need" required placeholder="เช่น น้ำดื่ม 50 ชุด"></div>
+<div><label>จำนวนครัวเรือน</label><input id="homes" type="number" min="0" placeholder="0"></div>
+<div><label>สถานะ</label><select id="status"><option>เร่งด่วน</option><option>กำลังดำเนินการ</option><option>ดำเนินการแล้ว</option></select></div>
+<div class="full"><label>รายละเอียด</label><textarea id="detail" rows="3" placeholder="รายละเอียดเพิ่มเติม"></textarea></div>
+<div class="full"><button type="submit">บันทึกข้อมูล</button></div>
+</form>
+</div>
+</section>
+
+<div class="footer">Prototype v0.1 — ข้อมูลระดับน้ำและแผนที่ในรุ่นนี้เป็นข้อมูลตัวอย่าง ยังไม่ได้เชื่อมต่อ API จริง</div>
+</div>
+
+<script>
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleString('th-TH',{dateStyle:'medium',timeStyle:'medium'})}
+setInterval(tick,1000);tick();
+document.getElementById('helpForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const t=new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+ const area=document.getElementById('area').value, need=document.getElementById('need').value;
+ const status=document.getElementById('status').value;
+ const cls=status==='เร่งด่วน'?'b-red':status==='กำลังดำเนินการ'?'b-orange':'b-green';
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${t}</td><td>${area}</td><td>${need}</td><td><span class="badge ${cls}">${status}</span></td>`;
+ document.querySelector('#helpTable tbody').prepend(tr);
+ document.getElementById('helpCount').textContent=Number(document.getElementById('helpCount').textContent)+1;
+ this.reset(); alert('บันทึกข้อมูลเรียบร้อย');
+});
+</script>
+</body>
+</html>
